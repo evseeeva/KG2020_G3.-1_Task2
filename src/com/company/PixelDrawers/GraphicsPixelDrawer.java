@@ -1,4 +1,6 @@
-package com.company;
+package com.company.PixelDrawers;
+
+import com.company.PixelDrawers.PixelDrawer;
 
 import java.awt.*;
 

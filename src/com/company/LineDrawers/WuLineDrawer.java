@@ -1,7 +1,6 @@
 package com.company.LineDrawers;
 
-import com.company.LineDrawer;
-import com.company.PixelDrawer;
+import com.company.PixelDrawers.PixelDrawer;
 
 import java.awt.*;
 
@@ -13,11 +12,11 @@ public class WuLineDrawer implements LineDrawer {
     }
 
     @Override
-    public void drawLine(int x1, int y1, int x2, int y2) {
-        int dx = x2 - x1;
-        int dy = y2 - y1;
-        int gradient = 255;
-        if (Math.abs(dx) > Math.abs(dy)) {
+    public void drawLine(int x1, int y1, int x2, int y2, Color color) {
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        double gradient;
+        if (Math.abs(dx) >= Math.abs(dy)) {
             if (x1 > x2) {
                 int tmp = x1;
                 x1 = x2;
@@ -28,98 +27,36 @@ public class WuLineDrawer implements LineDrawer {
                 dx = -dx;
                 dy = -dy;
             }
-            if (y2 > y1) {
-                int d = 2 * dy - dx;
-                for (int i = x1; i <= x2; i++) {
-                    if (dx != 0) gradient = 255 * d / (2 * dx);
-                    pd.drawPixel(x1, y1, new Color(255, 0, 0, 255 - Math.abs(gradient)));
-                    if (d >= 0) {
-                        pd.drawPixel(x1, y1 + 1, new Color(255, 0, 0, Math.abs(gradient)));
-                        y1++;
-                        x1++;
-                        d += 2 * dy - 2 * dx;
-                    } else {
-                        pd.drawPixel(x1, y1 - 1, new Color(255, 0, 0, Math.abs(gradient)));
-                        x1++;
-                        d += 2 * dy;
-                    }
-                }
-            } else if (y2 < y1) {
-                int d = -2 * dy - dx;
-                for (int i = x1; i <= x2; i++) {
-                    if (dx != 0) gradient = 255 * d / (2 * dx);
-                    pd.drawPixel(x1, y1, new Color(255, 0, 0, 255 - Math.abs(gradient)));
-                    if (d >= 0) {
-                        pd.drawPixel(x1, y1 - 1, new Color(255, 0, 0, Math.abs(gradient)));
-                        y1--;
-                        x1++;
-                        d += -2 * dy - 2 * dx;
-                    } else {
-                        pd.drawPixel(x1, y1 + 1, new Color(255, 0, 0, Math.abs(gradient)));
-                        x1++;
-                        d -= 2 * dy;
-                    }
-                }
-            } else if (y2 == y1) {
-                for (int i = x1; i <= x2; i++) {
-                    pd.drawPixel(x1, y1, Color.RED);
-                    x1++;
-                }
+            double y = y1;
+            gradient = dy / dx;
+            for (int x = x1; x <= x2; x++) {
+                    pd.drawPixel(x, (int) y, new Color(color.getRed(), color.getGreen(), color.getBlue(), (float) (1 - (y - (int) y))));
+                    pd.drawPixel(x, (int) y + 1, new Color(color.getRed(), color.getGreen(), color.getBlue(), (float) (y - (int) y)));
+                    y += gradient;
             }
+
         } else if (Math.abs(dx) < Math.abs(dy)) {
-                if (y1 > y2) {
-                    int tmp = x1;
-                    x1 = x2;
-                    x2 = tmp;
-                    tmp = y1;
-                    y1 = y2;
-                    y2 = tmp;
-                    dx = -dx;
-                    dy = -dy;
-                }
-                if (x2 > x1) {
-                    int d = 2 * dx - dy;
-                    for (int i = y1; i <= y2; i++) {
-                        if (dy != 0) gradient = 255 * d / (2 * dy);
-                        pd.drawPixel(x1, y1, new Color(0, 0, 255, 255 - Math.abs(gradient)));
-                        if (d >= 0) {
-                            pd.drawPixel(x1 + 1, y1, new Color(0, 0, 255, Math.abs(gradient)));
-                            y1++;
-                            x1++;
-                            d += 2 * dx - 2 * dy;
-                        } else {
-                            pd.drawPixel(x1 - 1, y1, new Color(0, 0, 255, Math.abs(gradient)));
-                            y1++;
-                            d += 2 * dx;
-                        }
-
-                    }
-                } else if (x2 < x1) {
-                    int d = -2 * dx - dy;
-                    for (int i = y1; i <= y2; i++) {
-                        if (dy != 0) gradient = 255 * d / (2 * dy);
-                        pd.drawPixel(x1, y1, new Color(0, 0, 255, 255 - Math.abs(gradient)));
-                        if (d >= 0) {
-                            pd.drawPixel(x1 - 1, y1, new Color(0, 0, 255, Math.abs(gradient)));
-                            y1++;
-                            x1--;
-                            d += -2 * dx - 2 * dy;
-                        } else {
-                            pd.drawPixel(x1 + 1, y1, new Color(0, 0, 255, Math.abs(gradient)));
-                            y1++;
-                            d -= 2 * dx;
-                        }
-
-                    }
-                } else if (x2 == x1) {
-                    for (int i = y1; i <= y2; i++) {
-                        pd.drawPixel(x1, y1, Color.BLUE);
-                        y1++;
-                    }
-                }
+            if (y1 > y2) {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+                dx = -dx;
+                dy = -dy;
             }
-
+            double x = x1;
+            gradient = dx / dy;
+            for (int y = y1; y <= y2; y++) {
+                    pd.drawPixel((int) x, y, new Color(color.getRed(), color.getGreen(), color.getBlue(), (float) (1 - (x - (int) x))));
+                    pd.drawPixel((int) x + 1, y, new Color(color.getRed(), color.getGreen(), color.getBlue(), (float) (x - (int) x)));
+                    x += gradient;
+            }
         }
+
+
+    }
 
 }
 

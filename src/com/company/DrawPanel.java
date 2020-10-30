@@ -1,9 +1,11 @@
 package com.company;
 
-import com.company.LineDrawers.BresenhamLineDrawer;
-import com.company.LineDrawers.DDALineDrawer;
-import com.company.LineDrawers.GraphicsLineDrawer;
-import com.company.LineDrawers.WuLineDrawer;
+import com.company.CircleDrawers.BrezenhamCircleDrawer;
+import com.company.CircleDrawers.CircleDrawer;
+import com.company.CircleDrawers.WuCircleDrawer;
+import com.company.LineDrawers.*;
+import com.company.PixelDrawers.GraphicsPixelDrawer;
+import com.company.PixelDrawers.PixelDrawer;
 import utils.DrawUtils;
 
 import javax.swing.*;
@@ -28,25 +30,22 @@ public class DrawPanel extends JPanel implements MouseMotionListener {
         bi_g.fillRect(0,0,getWidth(), getHeight());
         bi_g.setColor(Color.BLACK);
         PixelDrawer pd = new GraphicsPixelDrawer(bi_g);
-        LineDrawer ld= new WuLineDrawer(pd);
+        LineDrawer ld= new DDALineDrawer(pd);
         drawAll(ld);
         g.drawImage(bi, 0, 0, null);
         bi_g.dispose();
-
     }
     private void drawAll(LineDrawer ld){
-        DrawUtils.drawSnowflake(ld, getWidth()/2, getHeight()/2, 100, 10);
-        ld.drawLine(getWidth()/2, getHeight()/2, position.x, position.y);
-
+        DrawUtils.drawSnowflake(ld, getWidth()/2-200, getHeight()/2-50, 100, 32, Color.black);
+        ld.drawLine(getWidth()/2, getHeight()/2, position.x, position.y, Color.black);
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+     public void mouseMoved(MouseEvent e) {
      position = new Point(e.getX(), e.getY());
      repaint();
     }
